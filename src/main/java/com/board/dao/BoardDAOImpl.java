@@ -29,6 +29,9 @@ public class BoardDAOImpl implements BoardDAO {
 	
 	@Override
 	public BoardVO view(int bno) throws Exception{
+		/* update viewcnt */
+		sql.update(namespace + ".inc_vcnt", bno);
+		
 		return sql.selectOne(namespace + ".view", bno);
 	}
 

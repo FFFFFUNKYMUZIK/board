@@ -28,6 +28,15 @@
 		bno = #{bno}
 </select>
 
+<!-- 게시물 조회수 업데이트 -->
+
+<update id="inc_vcnt" parameterType="int">
+	update tbl_board
+		set viewCnt = viewCnt+1
+		where bno =#{bno}
+</update>
+
+
 <!-- 게시물 수정 -->
 <update id="modify" parameterType="com.board.domain.BoardVO">
 	update tbl_board
