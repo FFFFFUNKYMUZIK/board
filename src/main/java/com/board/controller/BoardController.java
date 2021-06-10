@@ -51,7 +51,7 @@ public class BoardController {
  
  @RequestMapping(value = "/view", method = RequestMethod.GET)
  public void getView(@RequestParam("bno") int bno, Model model) throws Exception {
-	 BoardVO vo = service.view(bno);
+	 BoardVO vo = service.get(bno, true /* view */);
 	 model.addAttribute("view", vo);
  }
  
@@ -59,7 +59,7 @@ public class BoardController {
  
  @RequestMapping(value = "/modify", method = RequestMethod.GET)
  public void getModify(@RequestParam("bno") int bno, Model model) throws Exception{
-	 BoardVO vo = service.view(bno);
+	 BoardVO vo = service.get(bno, false /* view */);
 	 model.addAttribute("view", vo);
  }
  
@@ -79,6 +79,40 @@ public class BoardController {
 	 return "redirect:/board/list";
  }
  
- 
+ /* paging */
+ @RequestMapping(value = "/listPage", method = RequestMethod.GET)
+ public void getListPage(Model model, @RequestParam("num") int num) throws Exception{
+	 
+	 int count = service.count();
+	 
+	 int postNum = 10;
+	 int pageNum = (int)Math.ceil((double)count/postNum);
+	 int displayPost = (num-1)*postNum;
+	 
+	 int pageNum_cnt = 10;
+	 int endPageNum = (((int)Math.ceil((double)num/(double)pageNum_cnt))*pageNum_cnt);
+	 int startPageNum = endPageNum - (pageNum_cnt - 1);
+
+	 if (endPageNum > count) {
+		 endPageNum = count;
+	 }
+	 
+	 boolean prev = startPageNum == 1 ? false : true;
+	 boolean next = endPageNum >= count ? false : true;
+	 
+	// 시작 및 끝 번호
+	 model.addAttribute("startPageNum", startPageNum);
+	 model.addAttribute("endPageNum", endPageNum);
+
+	 // 이전 및 다음 
+	 model.addAttribute("prev", prev);
+	 model.addAttribute("next", next);
+	 
+	List<BoardVO> list = null;
+	list = service.listPage(displayPost, postNum);
+	model.addAttribute("list", list);
+	model.addAttribute("pageNum", pageNum);
+	model.addAttribute("select", num);
+ }
  
 }

@@ -27,8 +27,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public BoardVO view(int bno) throws Exception{
-		return dao.view(bno);
+	public BoardVO get(int bno, boolean view) throws Exception{
+		return dao.get(bno, view);
 	}
 	
 	@Override
@@ -41,4 +41,14 @@ public class BoardServiceImpl implements BoardService {
 		dao.delete(bno);
 	}
 
+	@Override
+	public int count() throws Exception{
+		return dao.count();
+	}
+	
+	@Override
+	public List<BoardVO> listPage(int displayPost, int postNum) throws Exception{
+		return dao.listPage(displayPost, postNum);
+	}
+	
 }
