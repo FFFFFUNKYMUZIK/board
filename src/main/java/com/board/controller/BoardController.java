@@ -93,12 +93,14 @@ public class BoardController {
 	 int endPageNum = (((int)Math.ceil((double)num/(double)pageNum_cnt))*pageNum_cnt);
 	 int startPageNum = endPageNum - (pageNum_cnt - 1);
 
-	 if (endPageNum > count) {
-		 endPageNum = count;
+	 int lastPageNum = (int)Math.ceil((double)count/(double)pageNum_cnt);
+	 
+	 if (endPageNum > lastPageNum) {
+		 endPageNum = lastPageNum;
 	 }
 	 
 	 boolean prev = startPageNum == 1 ? false : true;
-	 boolean next = endPageNum >= count ? false : true;
+	 boolean next = endPageNum == lastPageNum ? false : true;
 	 
 	// 시작 및 끝 번호
 	 model.addAttribute("startPageNum", startPageNum);
