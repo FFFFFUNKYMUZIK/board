@@ -1,5 +1,7 @@
 package com.board.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
@@ -7,12 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.board.domain.BoardVO;
+import com.board.domain.Page;
 import com.board.service.BoardService;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/board/*")
@@ -76,45 +76,72 @@ public class BoardController {
  public String getDelete(@RequestParam("bno") int bno, Model model) throws Exception{
 	 service.delete(bno);
 	 
-	 return "redirect:/board/list";
+	 return "redirect:/board/listPageSearch?num=1";
  }
  
  /* paging */
  @RequestMapping(value = "/listPage", method = RequestMethod.GET)
  public void getListPage(Model model, @RequestParam("num") int num) throws Exception{
 	 
-	 int count = service.count();
+	 Page page = new Page();
 	 
-	 int postNum = 10;
-	 int pageNum = (int)Math.ceil((double)count/postNum);
-	 int displayPost = (num-1)*postNum;
+	 page.setCount(service.count());
+	 page.setNum(num);
+	 /*
+	  * page.setPageNumCnt(num);
+	  * page.setPostNum(num);
+	  */
 	 
-	 int pageNum_cnt = 10;
-	 int endPageNum = (((int)Math.ceil((double)num/(double)pageNum_cnt))*pageNum_cnt);
-	 int startPageNum = endPageNum - (pageNum_cnt - 1);
-
-	 int lastPageNum = (int)Math.ceil((double)count/(double)pageNum_cnt);
-	 
-	 if (endPageNum > lastPageNum) {
-		 endPageNum = lastPageNum;
-	 }
-	 
-	 boolean prev = startPageNum == 1 ? false : true;
-	 boolean next = endPageNum == lastPageNum ? false : true;
+	 page.setPageNumCnt(5);
+	 page.setPostNum(30);
+	 	 
+	 page.calculate();
 	 
 	// 시작 및 끝 번호
-	 model.addAttribute("startPageNum", startPageNum);
-	 model.addAttribute("endPageNum", endPageNum);
+	 model.addAttribute("startPageNum", page.getStartPageNum());
+	 model.addAttribute("endPageNum", page.getEndPageNum());
 
 	 // 이전 및 다음 
-	 model.addAttribute("prev", prev);
-	 model.addAttribute("next", next);
+	 model.addAttribute("prev", page.isPrev());
+	 model.addAttribute("next", page.isNext());
 	 
 	List<BoardVO> list = null;
-	list = service.listPage(displayPost, postNum);
+	list = service.listPage(page.getDisplayPost(), page.getPostNum());
 	model.addAttribute("list", list);
-	model.addAttribute("pageNum", pageNum);
 	model.addAttribute("select", num);
+ }
+ 
+
+ /* searching & paging */
+ @RequestMapping(value = "/listPageSearch", method = RequestMethod.GET)
+ public void getListPageSearch(Model model, @RequestParam("num") int num, 
+		 @RequestParam(value = "searchType",required = false, defaultValue = "title") String searchType,
+		   @RequestParam(value = "keyword",required = false, defaultValue = "") String keyword) throws Exception{
+	 
+	 Page page = new Page();
+	 
+	 page.setCount(service.searchCount(searchType, keyword));
+	 page.setNum(num);
+	 /*
+	  * page.setPageNumCnt(num);
+	  * page.setPostNum(num);
+	  */
+	 
+	 page.setPageNumCnt(5);
+	 page.setPostNum(30);
+	 
+	// 검색 타입과 검색어
+	 page.setSearchType(searchType);
+	 page.setKeyword(keyword);
+	 	 
+	 page.calculate();
+	 
+	List<BoardVO> list = null;
+	list = service.listPageSearch(page.getDisplayPost(), page.getPostNum(), searchType, keyword);
+	model.addAttribute("list", list);
+	model.addAttribute("select", num);
+	model.addAttribute("page", page);
+
  }
  
 }

@@ -20,4 +20,10 @@ public interface BoardDAO {
 	
 	public List<BoardVO> listPage(int displayPost, int postNum) throws Exception;
 	
+	// 게시물 총 갯수 + 검색 적용
+		public int searchCount(String searchType, String keyword) throws Exception;
+	
+	public List<BoardVO> listPageSearch(
+			   int displayPost, int postNum, String searchType, String keyword) throws Exception;
+	
 }
