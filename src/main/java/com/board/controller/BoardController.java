@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.board.domain.BoardVO;
+import com.board.domain.ReplyVO;
+
 import com.board.domain.Page;
+
 import com.board.service.BoardService;
+import com.board.service.ReplyService;
 
 @Controller
 @RequestMapping("/board/*")
@@ -20,6 +24,9 @@ public class BoardController {
 	
 	@Inject
 	BoardService service;
+	
+	@Inject
+	ReplyService replyService;
 
 /* List of Posts */
 	
@@ -53,6 +60,10 @@ public class BoardController {
  public void getView(@RequestParam("bno") int bno, Model model) throws Exception {
 	 BoardVO vo = service.get(bno, true /* view */);
 	 model.addAttribute("view", vo);
+	 
+	 List<ReplyVO> reply = null;
+	 reply = replyService.list(bno);
+	 model.addAttribute("reply", reply);
  }
  
  /* modify Post */

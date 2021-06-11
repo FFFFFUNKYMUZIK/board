@@ -33,24 +33,15 @@ ${view.content}	<br />
 <hr />
 
 <ul>
+    
+    <c:forEach items ="${reply}" var="reply">
     <li>
-        <div>
-            <p>첫번째 댓글 작성자</p>
-            <p>첫번째 댓글</p>
-        </div>
+	    <div>
+    		<p>${reply.writer} / <fmt:formatDate value="${reply.regDate}" pattern="yyyy-MM-dd" /></p>
+    		<p>${reply.content }</p>
+	    </div>
     </li>
-    <li>
-        <div>
-            <p>두번째 댓글 작성자</p>
-            <p>두번째 댓글</p>
-        </div>
-    </li>
-    <li>
-        <div>
-            <p>세번째 댓글 작성자</p>
-            <p>세번째 댓글</p>
-        </div>
-    </li>
+    </c:forEach>
 </ul>
 
 <div>
