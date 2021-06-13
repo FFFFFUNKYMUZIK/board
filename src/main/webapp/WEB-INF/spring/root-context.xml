@@ -12,7 +12,7 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
 	 <!-- config파일 자동 로드 location="classpath:database.properties"  /!-->
-    <context:property-placeholder location="/config/*.properties" /> 
+    <context:property-placeholder location="WEB-INF/config/*.properties" /> 
 		
 	<bean
 	 class="org.springframework.jdbc.datasource.DriverManagerDataSource"
