@@ -28,8 +28,7 @@ public class BoardController {
 	@Inject
 	ReplyService replyService;
 
-/* List of Posts */
-	
+/* List of Posts */	
  @RequestMapping(value = "/list", method = RequestMethod.GET)
  public void getList(Model model) throws Exception {
   
