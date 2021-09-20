@@ -6,7 +6,7 @@ public class ReplyVO {
 
 /* table columns */
 /*
-	CREATE TABLE tbl_reply (
+	create table tbl_reply (
 	rno 		int 			not null auto_increment,
 	bno 		int 			not null,
 	writer 	varchar(30) not null,

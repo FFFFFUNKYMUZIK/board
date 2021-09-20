@@ -50,7 +50,7 @@ public class BoardController {
  public String postWrite(BoardVO vo) throws Exception{
 	 service.write(vo);
 	 
-	 return "redirect:/board/list";
+	 return "redirect:/board/listPageSearch?num=1";
  }
  
  /* view Post */
